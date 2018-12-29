@@ -1,10 +1,10 @@
 package com.sojson.common.dao;
 
+import com.sojson.common.model.URole;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import com.sojson.common.model.URole;
 
 public interface URoleMapper {
     int deleteByPrimaryKey(Long id);
@@ -19,9 +19,9 @@ public interface URoleMapper {
 
     int updateByPrimaryKey(URole record);
 
-	Set<String> findRoleByUserId(Long id);
+    Set<String> findRoleByUserId(Long id);
 
-	List<URole> findNowAllPermission(Map<String, Object> map);
-	
-	void initData();
+    List<URole> findNowAllPermission(Map<String, Object> map);
+
+    void initData();
 }

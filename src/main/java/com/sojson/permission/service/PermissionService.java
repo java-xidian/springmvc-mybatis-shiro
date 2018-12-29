@@ -1,18 +1,18 @@
 package com.sojson.permission.service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.sojson.common.model.UPermission;
 import com.sojson.core.mybatis.page.Pagination;
 import com.sojson.permission.bo.UPermissionBo;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 public interface PermissionService {
 
-	int deleteByPrimaryKey(Long id);
+    int deleteByPrimaryKey(Long id);
 
-	UPermission insert(UPermission record);
+    UPermission insert(UPermission record);
 
     UPermission insertSelective(UPermission record);
 
@@ -22,15 +22,17 @@ public interface PermissionService {
 
     int updateByPrimaryKey(UPermission record);
 
-	Map<String, Object> deletePermissionById(String ids);
+    Map<String, Object> deletePermissionById(String ids);
 
-	Pagination<UPermission> findPage(Map<String,Object> resultMap, Integer pageNo,
-			Integer pageSize);
-	List<UPermissionBo> selectPermissionById(Long id);
+    Pagination<UPermission> findPage(Map<String, Object> resultMap, Integer pageNo,
+                                     Integer pageSize);
 
-	Map<String, Object> addPermission2Role(Long roleId,String ids);
+    List<UPermissionBo> selectPermissionById(Long id);
 
-	Map<String, Object> deleteByRids(String roleIds);
-	//根据用户ID查询权限（permission），放入到Authorization里。
-	Set<String> findPermissionByUserId(Long userId);
+    Map<String, Object> addPermission2Role(Long roleId, String ids);
+
+    Map<String, Object> deleteByRids(String roleIds);
+
+    //根据用户ID查询权限（permission），放入到Authorization里。
+    Set<String> findPermissionByUserId(Long userId);
 }

@@ -1,19 +1,19 @@
 package com.sojson.core.shiro.cache;
 
-import java.io.Serializable;
-import java.util.Collection;
-
-import org.apache.shiro.session.Session;
-
 import com.sojson.common.utils.LoggerUtils;
 import com.sojson.common.utils.SerializeUtil;
 import com.sojson.core.shiro.session.CustomSessionManager;
 import com.sojson.core.shiro.session.SessionStatus;
 import com.sojson.core.shiro.session.ShiroSessionRepository;
+import org.apache.shiro.session.Session;
+
+import java.io.Serializable;
+import java.util.Collection;
+
 /**
  * Session 管理
- * @author sojson.com
  *
+ * @author sojson.com
  */
 @SuppressWarnings("unchecked")
 public class JedisShiroSessionRepository implements ShiroSessionRepository {
@@ -31,15 +31,15 @@ public class JedisShiroSessionRepository implements ShiroSessionRepository {
             throw new NullPointerException("session is empty");
         try {
             byte[] key = SerializeUtil.serialize(buildRedisSessionKey(session.getId()));
-            
-            
+
+
             //不存在才添加。
-            if(null == session.getAttribute(CustomSessionManager.SESSION_STATUS)){
-            	//Session 踢出自存存储。
-            	SessionStatus sessionStatus = new SessionStatus();
-            	session.setAttribute(CustomSessionManager.SESSION_STATUS, sessionStatus);
+            if (null == session.getAttribute(CustomSessionManager.SESSION_STATUS)) {
+                //Session 踢出自存存储。
+                SessionStatus sessionStatus = new SessionStatus();
+                session.setAttribute(CustomSessionManager.SESSION_STATUS, sessionStatus);
             }
-            
+
             byte[] value = SerializeUtil.serialize(session);
 
 
@@ -51,8 +51,8 @@ public class JedisShiroSessionRepository implements ShiroSessionRepository {
              * 这里没有走【shiro-config.properties】配置文件，需要注意的是【spring-shiro.xml】 也是直接配置的值，没有走【shiro-config.properties】
              *
              * PS  : 注意： 这里我们配置 redis的TTL单位是秒，而【spring-shiro.xml】配置的是需要加3个0（毫秒）。
-                long sessionTimeOut = session.getTimeout() / 1000;
-                Long expireTime = sessionTimeOut + SESSION_VAL_TIME_SPAN + (5 * 60);
+             long sessionTimeOut = session.getTimeout() / 1000;
+             Long expireTime = sessionTimeOut + SESSION_VAL_TIME_SPAN + (5 * 60);
              */
 
 
@@ -61,7 +61,7 @@ public class JedisShiroSessionRepository implements ShiroSessionRepository {
              */
             getJedisManager().saveValueByKey(DB_INDEX, key, value, (int) (session.getTimeout() / 1000));
         } catch (Exception e) {
-        	LoggerUtils.fmtError(getClass(), e, "save session error，id:[%s]",session.getId());
+            LoggerUtils.fmtError(getClass(), e, "save session error，id:[%s]", session.getId());
         }
     }
 
@@ -74,35 +74,35 @@ public class JedisShiroSessionRepository implements ShiroSessionRepository {
             getJedisManager().deleteByKey(DB_INDEX,
                     SerializeUtil.serialize(buildRedisSessionKey(id)));
         } catch (Exception e) {
-        	LoggerUtils.fmtError(getClass(), e, "删除session出现异常，id:[%s]",id);
+            LoggerUtils.fmtError(getClass(), e, "删除session出现异常，id:[%s]", id);
         }
     }
 
-   
-	@Override
+
+    @Override
     public Session getSession(Serializable id) {
         if (id == null)
-        	 throw new NullPointerException("session id is empty");
+            throw new NullPointerException("session id is empty");
         Session session = null;
         try {
             byte[] value = getJedisManager().getValueByKey(DB_INDEX, SerializeUtil
                     .serialize(buildRedisSessionKey(id)));
             session = SerializeUtil.deserialize(value, Session.class);
         } catch (Exception e) {
-        	LoggerUtils.fmtError(getClass(), e, "获取session异常，id:[%s]",id);
+            LoggerUtils.fmtError(getClass(), e, "获取session异常，id:[%s]", id);
         }
         return session;
     }
 
     @Override
     public Collection<Session> getAllSessions() {
-    	Collection<Session> sessions = null;
-		try {
-			sessions = getJedisManager().AllSession(DB_INDEX,REDIS_SHIRO_SESSION);
-		} catch (Exception e) {
-			LoggerUtils.fmtError(getClass(), e, "获取全部session异常");
-		}
-       
+        Collection<Session> sessions = null;
+        try {
+            sessions = getJedisManager().AllSession(DB_INDEX, REDIS_SHIRO_SESSION);
+        } catch (Exception e) {
+            LoggerUtils.fmtError(getClass(), e, "获取全部session异常");
+        }
+
         return sessions;
     }
 
