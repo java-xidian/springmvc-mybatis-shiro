@@ -13,7 +13,7 @@
         </div>
         <div role="navigation" class="navbar-collapse collapse">
             <a id="_logo" href="${basePath}" style="color:#fff; font-size: 24px;" class="navbar-brand hidden-sm">SSM +
-                Shiro Demo 演示</a>
+                Shiro Demo</a>
             <ul class="nav navbar-nav" id="topMenu">
                 <li class="dropdown ${(index==1)?string('active','')}">
                     <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown"
